@@ -7,12 +7,25 @@ import (
 
 func reactFileServer(fs http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, req *http.Request) {
-		staticIndex := strings.Index(req.URL.Path, "/static/");
-		if staticIndex == -1 {
+		var staticPaths [1]string
+
+		// react's static folder
+		staticPaths[0] = "/static/"
+
+		var isStaticPath bool = false
+		for _, path := range staticPaths {
+			staticIndex := strings.Index(req.URL.Path, path);
+			if staticIndex == 0 {
+				isStaticPath = true
+				break
+			}
+		}
+
+		if isStaticPath {
+			fs.ServeHTTP(w, req)
+		} else {
 			fsHandler := http.StripPrefix(req.URL.Path, fs)
 			fsHandler.ServeHTTP(w, req)
-		} else {
-			fs.ServeHTTP(w, req)
 		}
 	}
 	return http.HandlerFunc(fn)
