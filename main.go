@@ -14,8 +14,7 @@ func reactFileServer(fs http.Handler) http.Handler {
 
 		var isStaticPath bool = false
 		for _, path := range staticPaths {
-			staticIndex := strings.Index(req.URL.Path, path);
-			if staticIndex == 0 {
+			if strings.HasPrefix(req.URL.Path, path) {
 				isStaticPath = true
 				break
 			}
