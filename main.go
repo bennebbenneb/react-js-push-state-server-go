@@ -7,10 +7,9 @@ import (
 
 func reactFileServer(fs http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, req *http.Request) {
-		var staticPaths [1]string
 
-		// react's static folder
-		staticPaths[0] = "/static/"
+		// todo: add more static paths to this array if needed
+		staticPaths := [...]string{"/static/"}
 
 		var isStaticPath bool = false
 		for _, path := range staticPaths {
